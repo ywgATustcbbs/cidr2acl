@@ -1,49 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 
 class CidrToAclConverter
 {
     static void Main(string[] args)
     {
-        // 输入CIDR列表（实际应用中可从文件读取）
-        var cidrList = new List<string>
+        string filePath = @"C:\Users\ustcy\Desktop\unicom-cidr.txt";
+        
+        // 检查文件是否存在
+        if (!File.Exists(filePath))
         {
-            "1.0.1.0/24",
-            "1.0.8.0/22",
-            "1.15.0.0/16",
-            "1.88.0.0/14",
-            "223.202.248.0/22",
-            "223.223.176.0/20"
-        };
+            Console.WriteLine($"文件不存在: {filePath}");
+            return;
+        }
+
+        var cidrList = new List<string>();
+        
+        // 从文件读取CIDR记录
+        try
+        {
+            cidrList = new List<string>(File.ReadAllLines(filePath));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"读取文件时出错: {ex.Message}");
+            return;
+        }
 
         int ruleNumber = 5; // 起始规则编号
         var aclCommands = new List<string>();
 
+        // 添加ACL头部
+        aclCommands.Add("acl number 3100");
+
         foreach (var cidr in cidrList)
         {
+            // 跳过空行
+            if (string.IsNullOrWhiteSpace(cidr))
+                continue;
+                
             // 解析CIDR格式
             var parts = cidr.Split('/');
             if (parts.Length != 2) continue;
 
-            var ipAddress = IPAddress.Parse(parts[0]);
-            var prefixLength = int.Parse(parts[1]);
+            try
+            {
+                var ipAddress = IPAddress.Parse(parts[0]);
+                var prefixLength = int.Parse(parts[1]);
 
-            // 计算反掩码(wildcard mask)
-            var wildcardMask = CalculateWildcardMask(prefixLength);
+                // 计算反掩码(wildcard mask)
+                var wildcardMask = CalculateWildcardMask(prefixLength);
 
-            // 生成ACL命令
-            aclCommands.Add($"rule {ruleNumber} permit ip destination {ipAddress} {wildcardMask}");
-            ruleNumber += 5; // 规则号递增
+                // 生成ACL命令
+                aclCommands.Add($"rule {ruleNumber} permit ip destination {ipAddress} {wildcardMask}");
+                ruleNumber += 5; // 规则号递增
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"解析CIDR记录 '{cidr}' 时出错: {ex.Message}");
+            }
         }
 
-        // 输出结果
-        Console.WriteLine("acl number 3100");
-        foreach (var cmd in aclCommands)
+        // 添加ACL尾部
+        aclCommands.Add("quit");
+
+        // 生成输出文件路径（与输入文件相同目录）
+        string outputDirectory = Path.GetDirectoryName(filePath);
+        string outputPath = Path.Combine(outputDirectory, "acl.txt");
+
+        // 写入文件
+        try
         {
-            Console.WriteLine($" {cmd}");
+            File.WriteAllLines(outputPath, aclCommands);
+            Console.WriteLine($"ACL命令已成功写入: {outputPath}");
         }
-        Console.WriteLine("quit");
+        catch (Exception ex)
+        {
+            Console.WriteLine($"写入文件时出错: {ex.Message}");
+        }
     }
 
     static string CalculateWildcardMask(int prefixLength)
