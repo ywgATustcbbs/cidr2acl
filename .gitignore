@@ -1,0 +1,16 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+*.vsidx
+/.vs/cidr2acl/CopilotIndices/17.14.734.62261/CodeChunks.db
+*.db-shm
+*.db-wal
+/.vs/cidr2acl/CopilotIndices/17.14.734.62261/SemanticSymbols.db
+/.vs/cidr2acl/v17/.futdcache.v2
+/.vs/cidr2acl/DesignTimeBuild/.dtbcache.v2
+/.vs/cidr2acl/v17/DocumentLayout.json
+/.vs/ProjectEvaluation/cidr2acl.metadata.v9.bin
+/.vs/ProjectEvaluation/cidr2acl.projects.v9.bin
+/.vs/ProjectEvaluation/cidr2acl.strings.v9.bin
+/.vs/cidr2acl/v17/.suo
