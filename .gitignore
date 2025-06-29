@@ -14,3 +14,15 @@
 /.vs/ProjectEvaluation/cidr2acl.projects.v9.bin
 /.vs/ProjectEvaluation/cidr2acl.strings.v9.bin
 /.vs/cidr2acl/v17/.suo
+/cidr2acl/bin/Debug/net9.0
+/cidr2acl/obj/Debug/net9.0/ref
+/cidr2acl/obj/Debug/net9.0/refint
+*.exe
+*.pdb
+/cidr2acl/obj/Debug/net9.0/cidr2acl.dll
+*.cache
+/cidr2acl/obj/Debug/net9.0/cidr2acl.csproj.FileListAbsolute.txt
+/cidr2acl/obj/Debug/net9.0/cidr2acl.AssemblyInfoInputs.cache
+/cidr2acl/obj/Debug/net9.0/cidr2acl.AssemblyInfo.cs
+/cidr2acl/obj/Debug/net9.0/cidr2acl.sourcelink.json
+/.vs/cidr2acl/v17/DocumentLayout.backup.json
